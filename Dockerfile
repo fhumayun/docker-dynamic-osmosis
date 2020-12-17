@@ -30,17 +30,8 @@ RUN apt-get update && \
         xz-utils
 
 
-# add user dev, add dev to sudo group
-RUN useradd -m dev && \
-    echo "dev:dev" | chpasswd && \
-    usermod -aG sudo dev
-
-
-USER dev
-WORKDIR /home/dev
-
-
 # clone the latest version of crosstool-ng and make it
+WORKDIR /home/dev
 RUN git clone -b crosstool-ng-1.24.0 --single-branch --depth 1 https://github.com/crosstool-ng/crosstool-ng.git
 WORKDIR /home/dev/crosstool-ng
 RUN ./bootstrap && \
