@@ -41,7 +41,7 @@ WORKDIR /home/dev
 
 
 # clone the latest version of crosstool-ng and make it
-RUN git clone -b master --single-branch --depth 1 https://github.com/crosstool-ng/crosstool-ng.git
+RUN git clone -b crosstool-ng-1.24.0 --single-branch --depth 1 https://github.com/crosstool-ng/crosstool-ng.git
 WORKDIR /home/dev/crosstool-ng
 RUN ./bootstrap && \
     ./configure --prefix=/home/dev/.local && \

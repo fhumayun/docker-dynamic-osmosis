@@ -1,8 +1,8 @@
 #!/bin/bash
 
 imageId=wti-internal
-imageName=aarch64-cross-compile
-imageVersion=0.1-a
+imageName=crosstool-ng
+imageVersion=1.24.0
 imageTag=$imageId/$imageName:$imageVersion
 
 docker run --rm -ti $imageTag
