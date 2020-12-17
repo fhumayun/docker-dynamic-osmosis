@@ -40,3 +40,17 @@ USER dev
 WORKDIR /home/dev
 
 
+# clone the latest version of crosstool-ng and make it
+RUN git clone -b master --single-branch --depth 1 https://github.com/crosstool-ng/crosstool-ng.git
+WORKDIR /home/dev/crosstool-ng
+RUN ./bootstrap && \
+    ./configure --prefix=/home/dev/.local && \
+    make -j$(($(nproc) * 2)) && \
+    make install &&  \
+    rm -rf /home/dev/crosstool-ng
+ENV PATH=/home/dev/.local/bin:$PATH
+
+
+# start in /home/dev
+WORKDIR /home/dev
+RUN rm -rf /home/dev/crosstool-ng
