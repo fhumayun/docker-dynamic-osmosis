@@ -7,4 +7,4 @@ imageName=aarch64-cross-compile
 imageVersion=0.1-a
 imageTag=$imageId/$imageName:$imageVersion
 
-docker build --tag $imageId/$imageName:$imageVersion $scriptDir
+docker build --tag $imageTag $scriptDir
