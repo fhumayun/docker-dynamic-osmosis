@@ -15,6 +15,7 @@ RUN apt-get update && \
         gawk \
         gcc \
         git \
+        gperf \
         help2man \
         libncurses5-dev \
         libstdc++6 \
@@ -30,7 +31,17 @@ RUN apt-get update && \
         xz-utils
 
 
-# clone the latest version of crosstool-ng and make it
+# add user dev, add dev to sudo group
+RUN useradd -m dev && \
+    echo "dev:dev" | chpasswd && \
+    usermod -aG sudo dev
+
+
+USER dev
+WORKDIR /home/dev
+
+
+# clone the version 1.24.0 of crosstool-ng and make it
 WORKDIR /home/dev
 RUN git clone -b crosstool-ng-1.24.0 --single-branch --depth 1 https://github.com/crosstool-ng/crosstool-ng.git
 WORKDIR /home/dev/crosstool-ng
