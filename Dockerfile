@@ -9,8 +9,8 @@ WORKDIR /home/dev/RPi
 COPY ${TARGET}.config .config
 
 
-#RUN ct-ng build || { cat build.log && false; } && rm -rf .build
+RUN ct-ng build || { cat build.log && false; } && rm -rf .build
 
-#ENV TOOLCHAIN_PATH=/home/dev/x-tools/${TARGET}
-#ENV PATH=${TOOLCHAIN_PATH}/bin:$PATH
-#WORKDIR /home/dev
+ENV TOOLCHAIN_PATH=/home/dev/x-tools/${TARGET}
+ENV PATH=${TOOLCHAIN_PATH}/bin:$PATH
+WORKDIR /home/dev
