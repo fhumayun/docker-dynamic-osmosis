@@ -48,7 +48,7 @@ RUN git clone -b crosstool-ng-1.24.0 --single-branch --depth 1 https://github.co
 WORKDIR /home/dev/crosstool-ng
 RUN ./bootstrap && \
     ./configure --prefix=/home/dev/.local && \
-    make -j 2 VERBOSE=1 && \
+    make -j$(($(nproc) * 2)) && \
     make install &&  \
     rm -rf /home/dev/crosstool-ng
 ENV PATH=/home/dev/.local/bin:$PATH
