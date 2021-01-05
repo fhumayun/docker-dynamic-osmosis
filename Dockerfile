@@ -13,4 +13,5 @@ RUN ct-ng build || { cat build.log && false; } && rm -rf .build
 
 ENV TOOLCHAIN_PATH=/home/dev/x-tools/${TARGET}
 ENV PATH=${TOOLCHAIN_PATH}/bin:$PATH
+ENV CXX_PREFIX=aarch64-rpi3-linux-gnu-
 WORKDIR /home/dev
