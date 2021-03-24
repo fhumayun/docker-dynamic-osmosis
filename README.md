@@ -15,3 +15,7 @@ A specific cross compiler toolchain used to cross compile Raspberry Pi AArch64 t
 ## Ceedling
 
 The Ceedling unit test framework allows embedded C applications to be unit tested without target hardware.
+
+## Pipelines
+
+Contains various container descriptions used in the CICD pipelines for the different projects
