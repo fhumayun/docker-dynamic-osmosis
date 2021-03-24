@@ -1,0 +1,25 @@
+FROM alpine:3.13.2
+USER root 
+
+# Enable "edge" repo
+RUN sed -i -e 's/v[[:digit:]]\..*\//edge\//g' /etc/apk/repositories
+
+# Install compilation dependencies
+RUN apk add --no-cache bear make g++ libstdc++ libc6-compat \
+        libc-dev libpthread-stubs gcompat clang-extra-tools \
+        python3 boost-dev zip openjdk11-jre bash
+
+# Get run-clang-tidy.py python script to easily execute analysis recursively
+RUN wget https://raw.githubusercontent.com/llvm-mirror/clang-tools-extra/1c8cadde7ea4ca20a449edcffe10d23b612fe5d6/clang-tidy/tool/run-clang-tidy.py
+
+# Setup sonar-scanner
+RUN wget -O /tmp/sonar-scanner.zip \
+        https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.0.2311.zip && \
+    unzip /tmp/sonar-scanner.zip -d /tmp/sonar-scanner && \
+    mv /tmp/sonar-scanner/* /sonar-scanner && \
+    rm -rf /tmp/sonar*
+ENV PATH="/sonar-scanner/bin:$PATH"
+
+COPY dockerd-entrypoint.sh /usr/local/bin/
+
+ENTRYPOINT ["dockerd-entrypoint.sh"]
