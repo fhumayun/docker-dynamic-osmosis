@@ -1,0 +1,12 @@
+[Unit]
+Description=Osmosis Connectivity Daemon
+
+[Service]
+User=root
+WorkingDirectory=/app/cloud
+ExecStart=/app/cloud/bin/cloud -w ../manager/ -s ../star_local.jks 
+Restart=always
+RestartSec=500ms
+
+[Install]
+WantedBy=multi-user.target
