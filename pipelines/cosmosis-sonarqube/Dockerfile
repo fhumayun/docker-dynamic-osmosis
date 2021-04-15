@@ -1,6 +1,6 @@
 FROM ubuntu:20.10
 
-RUN apt update && apt install -y bear make g++ python3 libboost-all-dev wget git zip
+RUN apt update && apt install -y bear make g++ python3 python3-pip cmake libboost-all-dev wget git zip
 RUN apt install -y clang-tidy openjdk-11-jre nodejs
 
 # Get run-clang-tidy.py python script to easily execute analysis recursively
@@ -14,7 +14,8 @@ RUN wget -O /tmp/sonar-scanner.zip \
     rm -rf /tmp/sonar*
 ENV PATH="/sonar-scanner/bin:$PATH"
 
-COPY dockerd-entrypoint.sh /usr/local/bin/
+RUN pip3 install conan
 
+COPY dockerd-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["dockerd-entrypoint.sh"]
 
