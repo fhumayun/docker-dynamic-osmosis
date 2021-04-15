@@ -6,7 +6,6 @@ NOHUP_PID="-0"
 
 function start_cloud () {
     nohup ./bin/cloud -w ../manager/ -s ../star_local.jks &> /dev/null &
-    rm /app/cloud/nohup.out
     NOHUP_PID="$!"
 }
 

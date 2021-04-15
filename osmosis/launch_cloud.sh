@@ -7,18 +7,26 @@ if [ ! -e "osmosis.tar.gz" ]; then
     cd osmosis
 
     # get star_local certificate
-    CERT_PATH=$(ls -l ~/osmosis/star_local.jks | cut -d">" -f 2-)
+    CERT_PATH=$(ls -l ../../osmosis/star_local.jks | cut -d">" -f 2-)
     cp $CERT_PATH ./star_local.jks
 
+    # get the name of the last cloud artifact
+    CLOUD_FULLPATH=$(aws s3 ls s3://osmosis-cicd-artifactbucket-1s4qfttb1z9mh/build/ | grep cloud-dev | grep '\.gz$' | sort | tail -1)
+    CLOUD=$(echo $CLOUD_FULLPATH | cut -d ' ' -f 4)
+
     # bundle cloud
-    aws s3 cp s3://osmosis-cicd-artifactbucket-1s4qfttb1z9mh/build/cloud-dev-0.12.5-20210319T184924Z.tar.gz ./cloud.tar.gz
+    aws s3 cp s3://osmosis-cicd-artifactbucket-1s4qfttb1z9mh/build/$CLOUD ./cloud.tar.gz
     tar xf cloud.tar.gz
     rm cloud.tar.gz
+
+    # get the name of the last manager artifact
+    MANAGER_FULLPATH=$(aws s3 ls s3://osmosis-cicd-artifactbucket-1s4qfttb1z9mh/manager/ | grep manager-dev | sort | tail -1)
+    MANAGER=$(echo $MANAGER_FULLPATH | cut -d ' ' -f 4)
 
     # bundle manager
     mkdir manager
     cd manager
-    aws s3 cp s3://osmosis-cicd-artifactbucket-1s4qfttb1z9mh/manager/manager-dev-0.12.10-20210408T202152UTC.tar.gz ./manager.tar.gz
+    aws s3 cp s3://osmosis-cicd-artifactbucket-1s4qfttb1z9mh/manager/$MANAGER ./manager.tar.gz
     tar xf manager.tar.gz
     rm manager.tar.gz
 
@@ -29,10 +37,16 @@ if [ ! -e "osmosis.tar.gz" ]; then
     rm -rf osmosis
 fi
 
-I_NAME=osmosis-java-runner
-docker build --tag $I_NAME .
+U_NAME=osmosis-ubuntu-runner
+C_NAME=osmosis-centos-runner
+docker build -f Dockerfile.ubuntu --tag $U_NAME .
+docker build -f Dockerfile.centos --tag $C_NAME .
+
+docker run \
+    -d \
+    $C_NAME
 
 docker run \
     -it --rm \
     -p 8522:8522 \
-    $I_NAME
+    $U_NAME
