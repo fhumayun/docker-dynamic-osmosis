@@ -6,6 +6,11 @@ if [ ! -e "osmosis.tar.gz" ]; then
     mkdir osmosis
     cd osmosis
 
+    if [ ! -f "../../osmosis/star_local.jks" ]; then 
+        echo star_local.jks not found, it should be located at ../../osmosis/ ; 
+        exit
+    fi
+
     # get star_local certificate
     CERT_PATH=$(ls -l ../../osmosis/star_local.jks | cut -d">" -f 2-)
     cp $CERT_PATH ./star_local.jks
@@ -43,10 +48,16 @@ docker build -f Dockerfile.ubuntu --tag $U_NAME .
 docker build -f Dockerfile.centos --tag $C_NAME .
 
 docker run \
+    --name centoscloudcontainer \
     -d \
+    -h testcentos \
+    -e CONTAINER_ID="11111111-2222-3333-4444-555555555555" \
     $C_NAME
 
 docker run \
-    -it --rm \
+    --name ubuntucloudcontainer \
+    -h testubuntu \
+    -e CONTAINER_ID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" \
+    -e "TCP=cloud.dev.windtalker.com test test2 test3" \
     -p 8522:8522 \
     $U_NAME
