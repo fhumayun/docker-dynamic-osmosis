@@ -84,7 +84,13 @@ COPY enable_scl_8.sh /etc/profile.d/
 # Setup Python 3 and Conan
 RUN yum install -y python3
 RUN pip3 install conan
-RUN yum install -y cmake
+
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.20.1/cmake-3.20.1-linux-aarch64.tar.gz \
+      && gunzip cmake-3.20.1-linux-aarch64.tar.gz \
+      && tar xvf cmake-3.20.1-linux-aarch64.tar \
+      && rm -rf cmake-3.20.1-linux-aarch64.tar*
+
+ENV PATH "/cmake-3.20.1-linux-aarch64/bin:$PATH"
 
 #########################
 # COPY dockerd-entrypoint.sh /usr/local/bin/
