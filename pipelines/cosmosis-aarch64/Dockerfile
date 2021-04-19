@@ -60,14 +60,8 @@ RUN curl -sS -o /usr/local/bin/aws-iam-authenticator https://amazon-eks.s3.us-we
 RUN curl -sS -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest 
 RUN chmod +x /usr/local/bin/aws-iam-authenticator /usr/local/bin/ecs-cli
 
-# Install env tools for runtimes
-
-##python
-RUN curl https://pyenv.run | bash
-ENV PATH="/root/.pyenv/shims:/root/.pyenv/bin:$PATH"
-
 #########################
-# RUN amazon-linux-extras install epel -y
+# Setup GCC 8
 
 RUN rpm --import http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-7
 
@@ -87,7 +81,13 @@ RUN yum remove -y yum-utils
 COPY enable_scl_8.sh /etc/profile.d/
 
 #########################
-COPY dockerd-entrypoint.sh /usr/local/bin/
+# Setup Python 3 and Conan
+RUN yum install -y python3
+RUN pip3 install conan
+RUN yum install -y cmake
+
+#########################
+# COPY dockerd-entrypoint.sh /usr/local/bin/
 
 # ENTRYPOINT ["dockerd-entrypoint.sh"]
 
