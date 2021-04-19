@@ -1,9 +1,9 @@
 FROM centos:centos8
 
-RUN yum install -y java-1.8.0-openjdk \
-    && yum install -y ncurses
+RUN yum install -y java-1.8.0-openjdk ncurses jq
 
-ENV JAVA_HOME /etc/alternatives/jre
+ENV JAVA_HOME=/etc/alternatives/jre
+ENV TERM=xterm
 COPY osmosis.tar.gz /tmp/
 RUN mkdir app
 RUN tar xf /tmp/osmosis.tar.gz --directory=/app

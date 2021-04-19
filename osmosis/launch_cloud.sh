@@ -42,16 +42,17 @@ if [ ! -e "osmosis.tar.gz" ]; then
     rm -rf osmosis
 fi
 
-U_NAME=osmosis-ubuntu-runner
-C_NAME=osmosis-centos-runner
+U_NAME=osmosis-ubuntu-runner-jq
+C_NAME=osmosis-centos-runner-jq
 docker build -f Dockerfile.ubuntu --tag $U_NAME .
 docker build -f Dockerfile.centos --tag $C_NAME .
 
 docker run \
     --name centoscloudcontainer \
-    -d \
     -h testcentos \
+    -d \
     -e CONTAINER_ID="11111111-2222-3333-4444-555555555555" \
+    -e "TCP=cloud.dev.windtalker.com test test2 test3" \
     $C_NAME
 
 docker run \
@@ -61,3 +62,4 @@ docker run \
     -e "TCP=cloud.dev.windtalker.com test test2 test3" \
     -p 8522:8522 \
     $U_NAME
+
