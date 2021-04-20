@@ -12,7 +12,14 @@ function start_cloud () {
 }
 
 start_cloud
-sleep 5
+
+# Wait for the node.json and osmosis.json files are created
+while [ ! -f config/node.json ] || [ ! -f config/osmosis.json ] 
+do
+  sleep 2
+  echo "Waiting for config files"
+done
+
 kill -9 $NOHUP_PID &> /dev/null
 
 NOHUP_PID="-0"
@@ -27,12 +34,17 @@ if [ -n "$TCP" ]; then
       ARR="$ARR \"$x\""
     done
     ARR="$ARR ]"
-    jq ".tcp_discovery = $ARR" ./config/osmosis.json > ./config/osmosis2.json
-    mv -f ./config/osmosis2.json ./config/osmosis.json
+
+    # Update the osmosis.json file
+    jq ".tcp_discovery = $ARR" ./config/osmosis.json > ./config/osmosistmp.json
+    mv -f ./config/osmosistmp.json ./config/osmosis.json
 fi
 
-jq '.id = "'$CONTAINER_ID'"' ./config/node.json  > ./config/node2.json 
-mv -f ./config/node2.json ./config/node.json
+# Update the node.json file with the ID rovided
+if [ -n "$NODE_ID" ]; then 
+  jq '.id = "'$NODE_ID'"' ./config/node.json  > ./config/nodetmp.json
+  mv -f ./config/nodetmp.json ./config/node.json
+fi
 
 # set hostname with env variable. with a check
 

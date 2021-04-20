@@ -6,6 +6,9 @@ General Docker container configuration repository.
 
 Crosstool-NG builds the toolchain, and provides a baseline set of tools used to create specific cross compiler toolchains down the line (see cross-toolchain below).
 
+## Osmosis
+
+Build the docker images for running osmosis on Ubuntu and Centos and push them to ECR.
 
 ## cross-toolchain
 
