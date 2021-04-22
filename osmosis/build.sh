@@ -17,7 +17,7 @@ Usage: $(basename "${BASH_SOURCE[0]}") [options]
 	
 Build docker images for running osmosis on Ubuntu 20.01 or Centos8
 and publish them to AWS ECR or run test containers.
-It is required to have the star_local.jks file located on ../../osmosis
+It is required to have the star_local.jks file located on docker/osmosis folder
 to provide it to the containers.
 
 Available options:
@@ -25,7 +25,8 @@ Available options:
     -p, --push                                    Push the images to AWS ECR
     -r, --run                                     Create test containers for Ubuntu and Centos
     -t, --tar                                     Create tar file from scratch.
-    -v, --version <artifact version>              Cloud-dev version for the tar file, by default use latest.
+    -c, --cloud   <artifact version>              Cloud-dev version for the tar file, by default use latest.
+    -m, --manager <artifact version>              Manager-dev version for the tar file, by default use latest.
                                                   Sample version format: 0.12.5 
     
 EOF
@@ -46,12 +47,17 @@ parseParams() {
             RUN=true
             ;;
         -t | --tar)
-            if [ -e "osmosis.tar.gz" ]; then
-                rm osmosis.tar.gz
+            if [ -e osmosis-cloud*.tar.gz ]; then
+                rm osmosis-cloud*.tar.gz
             fi
             ;;
-        -v | --version)
-            ARTIFACT_VERSION="${2-}"
+        -c | --cloud)
+            CLOUD_VERSION="${2-}"
+            shift
+            ;;
+        -m | --manager)
+            MANAGER_VERSION="${2-}"
+            shift
             ;;
         -?*)
             echo "${txtred}Unknown option: $1${txtrst}"
@@ -70,15 +76,10 @@ parseParams() {
 #---------------------------------------------------------------------------------------
 
 # Parse incoming parameters
-unset PUSH RUN ARTIFACT_VERSION
+unset PUSH RUN CLOUD_VERSION MANAGER_VERSION
 parseParams "$@"
 
-if [ -z $ARTIFACT_VERSION ]
-then
-  buildTar
-else
-  buildTar "$ARTIFACT_VERSION"
-fi
+buildTar "$CLOUD_VERSION" "$MANAGER_VERSION"
 
 scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/dockerfiles/." >/dev/null 2>&1 && pwd )"
 
@@ -89,22 +90,32 @@ IMAGE_VERSION_CENTOS=centos8-x64
     
 REGISTRY_URL="247011381634.dkr.ecr.us-west-2.amazonaws.com"
     
-IMAGE_TAG_UBUNTU="$REGISTRY_URL/$IMAGE_ID/$IMAGE_NAME:$IMAGE_VERSION_UBUNTU"
-IMAGE_TAG_CENTOS="$REGISTRY_URL/$IMAGE_ID/$IMAGE_NAME:$IMAGE_VERSION_CENTOS"
+IMAGE_TAG_UBUNTU="$REGISTRY_URL/$IMAGE_ID/$IMAGE_NAME:cloud$C_VERSION-manager$M_VERSION-$IMAGE_VERSION_UBUNTU"
+IMAGE_TAG_CENTOS="$REGISTRY_URL/$IMAGE_ID/$IMAGE_NAME:cloud$C_VERSION-manager$M_VERSION-$IMAGE_VERSION_CENTOS"
 
 # Build images
 docker build --tag $IMAGE_TAG_UBUNTU -f $scriptDir/Dockerfile.ubuntu .
 docker build --tag $IMAGE_TAG_CENTOS -f $scriptDir/Dockerfile.centos .
 
 
-if [ "$PUSH" = true ]; then
+if [ "$PUSH" == "true" ]; then
     # Tag and push to ECR
     docker push $IMAGE_TAG_UBUNTU
     docker push $IMAGE_TAG_CENTOS
 
 fi
 
-if [ "$RUN" = true ]; then
+if [ "$RUN" == "true" ]; then
+
+# Containers parameters:
+# --name: Name for the container
+# -d: Runs container on deamon mode
+# -p: Publish the ports of the container
+# h: Set hostname for containers, this will be the name of the node
+# -e NODE_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx": Id for the node
+# -e "TCP=XXX": Address for tcp connections.
+
+# Creates Centos container and runs it on daemon mode
     docker run \
         --name centoscloudcontainer \
         -h testcentos \
@@ -113,6 +124,8 @@ if [ "$RUN" = true ]; then
         -e "TCP=cloud.dev.windtalker.com" \
         $IMAGE_TAG_CENTOS
 
+# Creates ubuntu container and publish the 8522 port
+# This container is not on daemon mode
     docker run \
         --name ubuntucloudcontainer \
         -h testubuntu \
