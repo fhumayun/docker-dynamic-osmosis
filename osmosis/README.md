@@ -8,7 +8,7 @@ It is important to have `docker-entrypoint.sh` and the generated keystore on the
 
 First run new_star_local_key.sh and follow the steps provided to generate the Java keystore.
 
-The `build.sh` script builds the docker images for Ubuntu and Centos. It also allows to specify a cloud version to download from AWS. To check the usage of this script run `build.sh -h`.
+The `build.sh` script builds the docker images for Ubuntu and Centos. It also allows to specify the cloud or manager version to download from AWS. To check the usage of this script run `build.sh -h`.
 
 Important note: In order to push the images to AWS ECR it is required to authenticate docker on the AMAZON ECR private registry, for additional information check: https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html
 

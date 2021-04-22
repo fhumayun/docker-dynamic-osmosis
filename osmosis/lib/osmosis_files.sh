@@ -5,6 +5,7 @@ set -e
 # Creates the osmosis.tar.gz file. Use latest version of `manager`
 # Parameters:
 # 1. The version `cloud` to bundle inside the image.
+# 2. The version `manager` to bundle inside the image.
 buildTar()
 {   
     # Delete osmosis folder if exist from previous executions
