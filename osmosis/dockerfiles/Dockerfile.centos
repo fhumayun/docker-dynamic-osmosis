@@ -1,0 +1,15 @@
+FROM centos:centos8
+
+RUN yum install -y java-1.8.0-openjdk ncurses jq
+
+ENV JAVA_HOME=/etc/alternatives/jre
+ENV TERM=xterm
+COPY osmosis-cloud*.tar.gz /tmp/osmosis.tar.gz
+RUN mkdir app
+RUN tar xf /tmp/osmosis.tar.gz --directory=/app
+RUN rm /tmp/osmosis.tar.gz
+
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]

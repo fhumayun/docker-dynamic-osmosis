@@ -1,8 +1,9 @@
 FROM ubuntu:20.10
 
-RUN apt update && apt install -y openjdk-8-jre
+RUN apt update && apt install -y openjdk-8-jre jq
 
-COPY osmosis.tar.gz /tmp/
+ENV TERM=xterm
+COPY osmosis-cloud*.tar.gz /tmp/osmosis.tar.gz
 RUN mkdir /app
 RUN tar xf /tmp/osmosis.tar.gz --directory=/app
 RUN rm /tmp/osmosis.tar.gz
