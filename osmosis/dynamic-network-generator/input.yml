@@ -8,6 +8,11 @@ config:
     environment: 
       - NODE_ID=AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA
       - TCP=cloud.dev.windtalker.com test test2 test3
+  root:
+    image: "alpine"
+    network_mode: "host"
+    stdin_open: true
+    tty: true
 
 structure:
   root:

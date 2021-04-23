@@ -19,12 +19,16 @@ class Node:
         opts = ext_config.get(self.name) or {}
         all_opts = ext_config.get("__ALL") or {}
 
-        return {
-            "hostname": self.name,
-            "networks": self.networks,
-            **{**all_opts, **opts}
-        }
+        config = {
+                "hostname": self.name,
+                "networks": self.networks,
+                **{**all_opts, **opts}
+            }
 
+        if self.name == "root":
+            del config["networks"]
+
+        return config
 
 nodes_map = {}
 
