@@ -1,0 +1,81 @@
+services:
+  containerA:
+    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.12.11-ubuntu20.10-x64"
+    ports:
+      - "8522:8522"
+    environment: 
+      - NODE_ID=AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA
+      - TCP=cloud.dev.windtalker.com test test2 test3
+    hostname: "A"
+    networks:
+      - net0
+      - netA1
+      - netAB1
+  containerB:
+    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.12.11-centos8-x64"
+    environment: 
+      - NODE_ID=BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBB
+    hostname: "B"
+    networks:
+      - netA1
+      - netAB1
+  containerC:
+    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.12.11-ubuntu20.10-x64"
+    hostname: "C"
+    environment: 
+      - NODE_ID=CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCC
+    networks:
+      - netAB1
+  containerD:
+    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.12.11-ubuntu20.10-x64"
+    hostname: "D"
+    environment: 
+      - NODE_ID=DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDD
+    networks:
+      - netA1
+  containerE:
+    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.12.11-ubuntu20.10-x64"
+    hostname: "E"
+    environment: 
+      - NODE_ID=EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE
+    networks:
+      - net0
+  containerF:
+    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.12.11-ubuntu20.10-x64"
+    hostname: "F"
+    environment: 
+      - NODE_ID=FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFF
+    networks:
+      - net0
+      - netFG
+      - netF
+  containerG:
+    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.12.11-ubuntu20.10-x64"
+    hostname: "G"
+    environment: 
+      - NODE_ID=GGGGGGG-GGGG-GGGG-GGGG-GGGGGGGGGGGG
+    networks:
+      - netFG
+      - netF
+  containerH:
+    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.12.11-ubuntu20.10-x64"
+    hostname: "H"
+    environment: 
+      - NODE_ID=HHHHHHHH-HHHH-HHHH-HHHH-HHHHHHHHHHHH
+    networks:
+      - netFG
+      - netNGH
+  containerI:
+    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.12.11-ubuntu20.10-x64"
+    hostname: "I"
+    environment: 
+      - NODE_ID=IIIIIIII-IIII-IIII-IIII-IIIIIIIIIIII
+    networks:
+      - netNGH
+networks:
+  net0: {}
+  netA1: {}
+  netAB1: {}
+  netF: {}
+  netFG: {}
+  netNGH: {}
