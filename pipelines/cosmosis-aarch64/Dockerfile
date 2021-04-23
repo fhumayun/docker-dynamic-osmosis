@@ -92,6 +92,8 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v3.20.1/cmake-3.20.1
 
 ENV PATH "/cmake-3.20.1-linux-aarch64/bin:$PATH"
 
+RUN yum install -y sudo
+
 #########################
 # COPY dockerd-entrypoint.sh /usr/local/bin/
 
