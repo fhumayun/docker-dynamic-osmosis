@@ -1,6 +1,6 @@
 FROM centos:centos8
 
-RUN yum install -y java-1.8.0-openjdk ncurses jq
+RUN yum install -y java-1.8.0-openjdk ncurses jq iperf3
 
 ENV JAVA_HOME=/etc/alternatives/jre
 ENV TERM=xterm
