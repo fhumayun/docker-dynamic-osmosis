@@ -8,9 +8,9 @@ It is important to have `docker-entrypoint.sh` and the generated keystore on the
 
 First run new_star_local_key.sh and follow the steps provided to generate the Java keystore.
 
-The `build.sh` script builds the docker images for Ubuntu and Centos. It also allows to specify the cloud or manager version to download from AWS. To check the usage of this script run `build.sh -h`.
+The `build.sh` script builds the docker images for Ubuntu and Centos. It also allows you to specify the cloud or manager version to download from AWS. To check the usage of this script, run `build.sh -h`.
 
-Important note: In order to push the images to AWS ECR it is required to authenticate docker on the AMAZON ECR private registry, for additional information check: https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html
+Important note: In order to push the images to AWS ECR, you must authenticate docker on the AMAZON ECR private registry. For additional information check: https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html
 
 ## Folders
 
@@ -21,10 +21,10 @@ The `lib` has the scripts used for creating the tar files used by the docker ima
 ## Files
 ### docker-entrypoint.sh
 
-Used on the docker containers for running osmosis and update the configuration files according to the flags provided.
+Used on the docker containers for running osmosis and updating the configuration files according to the flags provided.
 ### star_local file
 
-This is the Java keystore for running osmosis. To generate it, run the `new_star_local_key.sh` script. The resulting file should be located at the osmosis folder of the Docker repository.
+This is the Java keystore for running osmosis. To generate it, run the `new_star_local_key.sh` script. The resulting file is located in the osmosis folder of the Docker repository.
 
 ### osmosis_files.sh
 
