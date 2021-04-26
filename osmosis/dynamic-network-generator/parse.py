@@ -42,7 +42,7 @@ def parseStructure(root):
     # If we've already encountered the node with the specified name then just use the one
     # in cache, else create a new instance and put it in the cache
     node: Node = nodes_map.get(node_name)
-    if not node:
+    if node is None:
         node = Node(node_name, [], [])
         nodes_map[node_name] = node
 
