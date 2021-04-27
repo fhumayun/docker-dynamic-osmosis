@@ -9,6 +9,7 @@ input_data = yaml.safe_load(open("input.yml", "r"))
 
 nodes_map = {}
 
+
 class Node:
     def __init__(self, name: str, children=[], networks=[]):
         self.name = name
@@ -21,20 +22,22 @@ class Node:
         all_opts = ext_config.get("__ALL") or {}
 
         config = {
-                "hostname": self.name,
-                "networks": self.networks,
-                **{**all_opts, **opts}
-            }
+            "hostname": self.name,
+            "networks": self.networks,
+            **{**all_opts, **opts}
+        }
 
         if self.name == "root":
             # root should be part of all networks
             config["networks"] = getAllNetworks()
 
             # root should depend on all other containers
-            config["depends_on"] = list(x for x in nodes_map.keys() if x != "root")
+            config["depends_on"] = list(
+                x for x in nodes_map.keys() if x != "root")
+
+            config["environment"] = ["NODES=" + ";".join(config["depends_on"])]
 
         return config
-
 
 
 def parseStructure(root):
@@ -69,7 +72,7 @@ def parseStructure(root):
 
 
 def getAllNetworks():
-    # get list of networks 
+    # get list of networks
     nets = []
     for node in nodes_map.values():
         nets += node.networks
@@ -94,6 +97,7 @@ def generateDockerfile():
 
     # export dockerfile
     yaml.safe_dump(out_data, open("docker-compose.yml", "w+"))
+
 
 if __name__ == "__main__":
     # run generation

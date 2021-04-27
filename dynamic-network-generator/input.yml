@@ -10,11 +10,8 @@ config:
       - TCP=cloud.dev.windtalker.com test test2 test3
   root:
     image: "alpine"
-    # network_mode: "host"
     stdin_open: true
     tty: true
-    volumes:
-      - ./performanceVolume:/app/results
 
 structure:
   root:
