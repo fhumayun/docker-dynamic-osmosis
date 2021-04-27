@@ -7,6 +7,8 @@ import uuid
 input_data: Dict[str, str]
 input_data = yaml.safe_load(open("input.yml", "r"))
 
+nodes_map = {}
+
 
 class Node:
     def __init__(self, name: str, children=[], networks=[]):
@@ -20,17 +22,22 @@ class Node:
         all_opts = ext_config.get("__ALL") or {}
 
         config = {
-                "hostname": self.name,
-                "networks": self.networks,
-                **{**all_opts, **opts}
-            }
+            "hostname": self.name,
+            "networks": self.networks,
+            **{**all_opts, **opts}
+        }
 
         if self.name == "root":
-            del config["networks"]
+            # root should be part of all networks
+            config["networks"] = getAllNetworks()
+
+            # root should depend on all other containers
+            config["depends_on"] = list(
+                x for x in nodes_map.keys() if x != "root")
+
+            config["environment"] = ["NODES=" + ";".join(config["depends_on"])]
 
         return config
-
-nodes_map = {}
 
 
 def parseStructure(root):
@@ -64,27 +71,37 @@ def parseStructure(root):
     return node
 
 
+def getAllNetworks():
+    # get list of networks
+    nets = []
+    for node in nodes_map.values():
+        nets += node.networks
+
+    # create the "network" block for the docker file
+    return list(set(nets))
+
+
 def generateDockerfile():
     _root = parseStructure(input_data["structure"])
 
-    out_data = {"services": {},
+    out_data = {"version": "3.9",
+                "services": {},
                 "networks": {}}
 
     # create a 'service' entry for every node
     for k, v in nodes_map.items():
         out_data["services"][k] = v.to_dict()
 
-    # get list of networks 
-    nets = []
-    for node in nodes_map.values():
-        nets += node.networks
-
     # create the "network" block for the docker file
-    out_data["networks"] = {net: {} for net in set(nets)}
+    out_data["networks"] = {net: {} for net in getAllNetworks()}
 
     # export dockerfile
     yaml.safe_dump(out_data, open("docker-compose.yml", "w+"))
 
+
 if __name__ == "__main__":
     # run generation
     generateDockerfile()
+
+    import os
+    # os.system("docker-compose start root")
