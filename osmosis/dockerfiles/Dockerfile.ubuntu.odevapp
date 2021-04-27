@@ -1,0 +1,9 @@
+FROM ubuntu:20.10
+
+RUN apt update && apt install -y openjdk-8-jre jq
+
+ENV TERM=xterm
+COPY odevapp.tar.gz /tmp/odevapp.tar.gz
+RUN mkdir /app
+RUN tar xf /tmp/odevapp.tar.gz --directory=/app
+RUN rm /tmp/odevapp.tar.gz
