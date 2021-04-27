@@ -9,8 +9,8 @@ config:
       - NODE_ID=AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA
       - TCP=cloud.dev.windtalker.com test test2 test3
   root:
-    image: "performance"
-    network_mode: "host"
+    image: "alpine"
+    # network_mode: "host"
     stdin_open: true
     tty: true
     volumes:
@@ -20,7 +20,4 @@ structure:
   root:
     - A:
       - B:
-        - C:
-        - G: 
     - F:
-      - G:
