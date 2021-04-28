@@ -1,10 +1,11 @@
-FROM ubuntu:20.10
+FROM centos:centos8
 
-RUN apt update && apt install -y openjdk-8-jre jq iperf3
+RUN yum install -y java-1.8.0-openjdk ncurses jq iperf3
 
+ENV JAVA_HOME=/etc/alternatives/jre
 ENV TERM=xterm
 COPY odevapp*.tar.gz /tmp/odevapp.tar.gz
-RUN mkdir /app
+RUN mkdir app
 RUN tar xf /tmp/odevapp.tar.gz --directory=/app
 RUN rm /tmp/odevapp.tar.gz
 
