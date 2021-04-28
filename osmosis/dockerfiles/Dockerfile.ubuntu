@@ -1,6 +1,6 @@
 FROM ubuntu:20.10
 
-RUN apt update && apt install -y openjdk-8-jre jq
+RUN apt update && apt install -y openjdk-8-jre jq iperf3
 
 ENV TERM=xterm
 COPY osmosis-cloud*.tar.gz /tmp/osmosis.tar.gz
