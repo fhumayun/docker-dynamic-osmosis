@@ -13,13 +13,15 @@ def getOdevappTar(version):
         version = ""
     
     # Check the name of the artifact
-    odevapp_path = sp.getoutput("aws s3 ls s3://osmosis-cicd-artifactbucket-1s4qfttb1z9mh/build/ " \
-                                "| grep osmosis-dev%s | grep '\.gz$' | sort | tail -1" %version)
-    odevapp = sp.getoutput("echo %s | cut -d ' ' -f 4" %odevapp_path)
+    odevapp_path = sp.getoutput("aws s3 ls s3://osmosis-cicd-artifactbucket-1s4qfttb1z9mh/build/ ").split("\n")
+    odevapp_path = [x for x in odevapp_path 
+                          if x.endswith(".gz") and f"osmosis-dev{version}" in x]
+    odevapp_path = sorted(odevapp_path)[-1]
+    odevapp = odevapp_path.split(" ")[-1]
     o_version = sp.getoutput("echo %s | cut -d '-' -f 3" %odevapp)
 
-    if len(sp.getoutput("echo %s | grep tar" %o_version)) > 0: 
-        o_version = sp.getoutput("echo %s | cut -d '.' -f -3" %o_version)
+    if "tar" in o_version: 
+        o_version = ".".join(o_version.split(".")[:3])
         
     if not os.path.isfile("odevapp%s.tar.gz" %version):
         
@@ -27,6 +29,6 @@ def getOdevappTar(version):
         if glob.glob("odevapp*.tar.gz"):
             os.system("rm odevapp*.tar.gz")
 
-        os.system("aws s3 cp s3://osmosis-cicd-artifactbucket-1s4qfttb1z9mh/build/%s ./odevapp%s.tar.gz" % (odevapp, version))
+        os.system(f"aws s3 cp s3://osmosis-cicd-artifactbucket-1s4qfttb1z9mh/build/{odevapp} ./odevapp{version}.tar.gz")
 
     return o_version
