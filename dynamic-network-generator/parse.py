@@ -6,20 +6,29 @@ import uuid
 
 input_data: Dict[str, str]
 input_data = yaml.safe_load(open("input.yml", "r"))
+ext_config = input_data["config"]
 
 nodes_map = {}
 
 
 class Node:
-    def __init__(self, name: str, children=[], networks=[]):
+    def __init__(self, name: str, children, networks):
         self.name = name
         self.children = children
         self.networks = networks
 
+        self.gen_opts = None
+        if self.name in ext_config and "gen_opts" in ext_config[self.name]:
+            self.gen_opts = ext_config[self.name]["gen_opts"]
+
     def to_dict(self):
-        ext_config = input_data["config"]
         opts = ext_config.get(self.name) or {}
         all_opts = ext_config.get("__ALL") or {}
+
+        # remove gen_opts if they exist
+        for opts_dict in [opts, all_opts]:
+            if "gen_opts" in opts_dict:
+                opts_dict.pop("gen_opts")
 
         config = {
             "hostname": self.name,
@@ -58,15 +67,28 @@ def parseStructure(root):
     if children is not None:
 
         # A parent and it's immediate children are connected by the same network
-        network_name = str(uuid.uuid4())
-        node.networks.append(network_name)
+        parent_network_name = f"{node.name}-parent-net-{str(uuid.uuid4())[:8]}"
 
         # Process every children as a standalone node and then register network for
         # the connection with the parent
         for c in children:
             c_node = parseStructure(c)
-            c_node.networks.append(network_name)
+
+            if c_node.gen_opts is not None and "networks" in c_node.gen_opts:
+                # If a child specified it's own set of networks then use that
+                cnets = c_node.gen_opts["networks"]
+                c_node.networks += cnets
+                node.networks += cnets
+            else:
+                # otherwise, assign the child to the parent's network
+                c_node.networks.append(parent_network_name)
+
             node.children.append(c_node)
+
+        # We only need the node to be assigned to it's own "parent network"
+        # if there is any node in that network
+        if any(parent_network_name in c.networks for c in node.children):
+            node.networks.append(parent_network_name)
 
     return node
 

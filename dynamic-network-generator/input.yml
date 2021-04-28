@@ -1,13 +1,27 @@
 config:
   __ALL:
     image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.12.11-ubuntu20.10-x64"
-  A:
+  D:
+    gen_opts:
+      networks:
+        - A_NET
+        - B_NET
     image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.12.11-centos8-x64"
     ports:
       - "8522:8522"
-    environment: 
+    environment:
       - NODE_ID=AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA
-      - TCP=cloud.dev.windtalker.com test test2 test3
+      - TCP=cloud.dev.windtalker.com
+  A:
+    gen_opts:
+      networks:
+        - A_NET
+  
+  E:
+    gen_opts:
+      networks:
+        - E_NET
+
   root:
     image: "alpine"
     stdin_open: true
@@ -16,5 +30,9 @@ config:
 structure:
   root:
     - A:
-      - B:
-    - F:
+        - B:
+        - C:
+    - D:
+    - E:
+        - F:
+        - G:
