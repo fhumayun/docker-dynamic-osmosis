@@ -46,6 +46,10 @@ if [ -n "$NODE_ID" ]; then
   mv -f ./config/nodetmp.json ./config/node.json
 fi
 
+# Update the osmosis.json file to accept http requests
+jq '.network.settings.api.http.address="0.0.0.0"' ./config/osmosis.json > ./config/osmosistmp.json
+mv -f ./config/osmosistmp.json ./config/osmosis.json
+
 # set hostname with env variable. with a check
 
 while true; do

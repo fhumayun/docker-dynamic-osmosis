@@ -132,5 +132,6 @@ if [ "$RUN" == "true" ]; then
         -e NODE_ID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" \
         -e "TCP=cloud.dev.windtalker.com" \
         -p 8522:8522 \
+        -p 9091:9091 \
         $IMAGE_TAG_UBUNTU
 fi

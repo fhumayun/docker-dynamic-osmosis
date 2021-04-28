@@ -26,8 +26,8 @@ image_version_ubuntu = "ubuntu20.10-x64"
 image_version_centos = "centos8-x64"
 registry_url="247011381634.dkr.ecr.us-west-2.amazonaws.com"
 
-image_tag_ubuntu = registry_url + "/" + image_id + "/" + image_name + ":osmosis" + image_version_ubuntu + o_version
-image_tag_centos = registry_url + "/" + image_id + "/" + image_name + ":osmosis" + image_version_centos + o_version
+image_tag_ubuntu = registry_url + "/" + image_id + "/" + image_name + ":osmosis" + o_version + image_version_ubuntu 
+image_tag_centos = registry_url + "/" + image_id + "/" + image_name + ":osmosis" + o_version + image_version_centos 
 
 # Build images
 os.system("docker build --tag %s -f %s/dockerfiles/Dockerfile.ubuntu.odevapp ." %(image_tag_ubuntu, os.getcwd()) )
