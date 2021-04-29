@@ -17,6 +17,8 @@ def getOdevappTar(version):
     odevapp_path = [x for x in odevapp_path 
                           if x.endswith(".gz") and f"osmosis-dev{version}" in x]
     odevapp_path = sorted(odevapp_path)[-1]
+
+    # TODO: change the split patterns to regex capture groups
     odevapp = odevapp_path.split(" ")[-1]
     o_version = sp.getoutput("echo %s | cut -d '-' -f 3" %odevapp)
 
