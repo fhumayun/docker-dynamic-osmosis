@@ -1,17 +1,16 @@
 config:
   __ALL:
-    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.12.11-ubuntu20.10-x64"
+    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/osmosis:osmosis0.12.6centos8-x64"
   D:
     gen_opts:
       networks:
         - A_NET
-        - B_NET
-    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.12.11-centos8-x64"
+        - E_NET
+    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.13.0-centos8-x64"
     ports:
       - "8522:8522"
     environment:
       - NODE_ID=AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA
-      - TCP=cloud.dev.windtalker.com
   A:
     gen_opts:
       networks:
@@ -30,9 +29,9 @@ config:
 structure:
   root:
     - A:
-        - B:
-        - C:
+      - B:
+      - C:
     - D:
     - E:
-        - F:
-        - G:
+      - F:
+      - G:
