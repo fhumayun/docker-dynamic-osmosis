@@ -1,0 +1,14 @@
+FROM ubuntu:20.10
+
+RUN apt update && apt install -y openjdk-8-jre jq iperf3
+
+ENV TERM=xterm
+COPY odevapp*.tar.gz /tmp/odevapp.tar.gz
+RUN mkdir /app
+RUN tar xf /tmp/odevapp.tar.gz --directory=/app
+RUN rm /tmp/odevapp.tar.gz
+
+COPY doe_odevapp.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/doe_odevapp.sh
+
+ENTRYPOINT [ "/usr/local/bin/doe_odevapp.sh" ]

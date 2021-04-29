@@ -94,8 +94,8 @@ IMAGE_TAG_UBUNTU="$REGISTRY_URL/$IMAGE_ID/$IMAGE_NAME:cloud$C_VERSION-manager$M_
 IMAGE_TAG_CENTOS="$REGISTRY_URL/$IMAGE_ID/$IMAGE_NAME:cloud$C_VERSION-manager$M_VERSION-$IMAGE_VERSION_CENTOS"
 
 # Build images
-docker build --tag $IMAGE_TAG_UBUNTU -f $scriptDir/Dockerfile.ubuntu .
-docker build --tag $IMAGE_TAG_CENTOS -f $scriptDir/Dockerfile.centos .
+docker build --tag $IMAGE_TAG_UBUNTU -f $scriptDir/Dockerfile.ubuntu.cloud .
+docker build --tag $IMAGE_TAG_CENTOS -f $scriptDir/Dockerfile.centos.cloud .
 
 
 if [ "$PUSH" == "true" ]; then
@@ -132,5 +132,6 @@ if [ "$RUN" == "true" ]; then
         -e NODE_ID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" \
         -e "TCP=cloud.dev.windtalker.com" \
         -p 8522:8522 \
+        -p 9091:9091 \
         $IMAGE_TAG_UBUNTU
 fi
