@@ -28,7 +28,9 @@ def request(hostname, iters, wait):
         data = r.json()['node']['connections']
         
         for d in data:
-            nodeinfo = Connections(d['peerName'], d['tx'], d['rx'])
+            # Get the time information
+            second = (time.time() - (data/1000))/60
+            nodeinfo = Connections(d['peerName'], second, d['tx'], d['rx'])
             results.append(nodeinfo)
     
     return results
@@ -44,12 +46,6 @@ with Pool(len(nodes)) as pool:
 with open('data.csv', 'w',) as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['peerName', 'time [s]', 'tx', 'rx'])
-    seconds = 0
-
-    while True:
-        time.sleep(1)
-        seconds += 1
-        print('Time measurement: %s seconds' %seconds)
-        for connection in request():
-            writer.writerow([connection.peer, seconds, connection.tx, connection.rx])
-        
+    
+    for nd in node_data:
+        writer.writerow([connection.peer, seconds, connection.tx, connection.rx])
