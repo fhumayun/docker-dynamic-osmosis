@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
-cd /app/cloud 
+cd /app/osmosis 
 
 NOHUP_PID="-0"
 
-function start_cloud () {
+function start_osmosis () {
  
-    nohup ./bin/cloud -w ../manager/ -s ../star_local.jks &> /dev/null &
+    nohup ./bin/osmosis -r &> /dev/null &
     NOHUP_PID="$!" 
 
 }
 
-start_cloud
+start_osmosis
 
 # Wait for the node.json and osmosis.json files are created
 while [ ! -f config/node.json ] || [ ! -f config/osmosis.json ] 
@@ -57,7 +57,7 @@ while true; do
     cat log/status.txt
 
     if ! ps -p $NOHUP_PID  > /dev/null; then
-      start_cloud
+      start_osmosis
       sleep 5
     fi
 

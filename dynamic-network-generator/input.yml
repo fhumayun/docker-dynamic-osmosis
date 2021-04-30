@@ -1,13 +1,26 @@
 config:
   __ALL:
-    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.13.0-ubuntu20.10-x64"
-  A:
+    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/osmosis:osmosis0.12.6centos8-x64"
+  D:
+    gen_opts:
+      networks:
+        - A_NET
+        - E_NET
     image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.13.0-centos8-x64"
     ports:
       - "8522:8522"
-    environment: 
+    environment:
       - NODE_ID=AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAA
-      - TCP=cloud.dev.windtalker.com test test2 test3
+  A:
+    gen_opts:
+      networks:
+        - A_NET
+  
+  E:
+    gen_opts:
+      networks:
+        - E_NET
+
   root:
     image: "python:3.9.4-alpine3.13"
     stdin_open: true
@@ -17,4 +30,8 @@ structure:
   root:
     - A:
       - B:
-    - F:
+      - C:
+    - D:
+    - E:
+      - F:
+      - G:
