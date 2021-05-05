@@ -22,9 +22,11 @@ config:
         - E_NET
 
   root:
-    image: "alpine"
+    image: "python:3.9.4-alpine3.13"
     stdin_open: true
     tty: true
+    volumes: 
+      - ./data:/app
 
 structure:
   root:
