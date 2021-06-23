@@ -64,7 +64,7 @@ for node in node_data:
 
 
 # Creates the file with the results, 1 for passed and 0 for failed
-result_file = open('test_result.txt', 'w')
+result_file = open('node_result.txt', 'w')
 
 if len(working_nodes) == len(nodes):
     result_file.write('1')

@@ -1,4 +1,4 @@
 docker-compose.yml
 *.tar.gz
 *.csv
-test_result.txt
+*.txt
