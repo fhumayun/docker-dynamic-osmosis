@@ -14,7 +14,7 @@ RUN wget -O /tmp/sonar-scanner.zip \
     rm -rf /tmp/sonar*
 ENV PATH="/sonar-scanner/bin:$PATH"
 
-RUN pip3 install conan
+RUN pip3 install conan==1.35.0
 
 COPY dockerd-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["dockerd-entrypoint.sh"]
