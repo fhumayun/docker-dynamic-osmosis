@@ -5,7 +5,7 @@ scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 IMAGE_ID=wti-build
 IMAGE_NAME=cosmosis-sonarqube
-IMAGE_VERSION=1.0.1
+IMAGE_VERSION=2.0.1
 
 REGISTRY_URL="247011381634.dkr.ecr.us-west-2.amazonaws.com"
 
