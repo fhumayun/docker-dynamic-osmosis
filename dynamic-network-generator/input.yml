@@ -1,12 +1,11 @@
 config:
   __ALL:
-    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/osmosis:osmosis0.12.6centos8-x64"
+    image: "cloud:cloud_0.16.12_manager_0.16.9"
   D:
     gen_opts:
       networks:
         - A_NET
         - E_NET
-    image: "247011381634.dkr.ecr.us-west-2.amazonaws.com/wti-dev/cloud:cloud0.12.6-manager0.13.0-centos8-x64"
     ports:
       - "8522:8522"
     environment:
